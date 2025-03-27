@@ -4,100 +4,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Error - CBL ONLINE WALLET CONNECT</title>
+  <title>Connection Error</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
     .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
       text-align: center;
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 20px;
     }
     
     .error-icon {
-      font-size: 5rem;
+      width: 80px;
+      height: 80px;
       margin-bottom: 20px;
-      color: #f44336;
     }
     
-    .error-title {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: #333;
-    }
-    
-    .error-message {
-      font-size: 1.1rem;
-      margin-bottom: 30px;
-      color: #666;
-    }
-    
-    .error-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      max-width: 300px;
-      margin: 0 auto;
+    .error-code {
+      font-size: 5rem;
+      font-weight: 700;
+      color: #f8f9fa;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-container">
-      <div class="logo">CBL ONLINE WALLET CONNECT</div>
-      <nav class="header-nav">
-        <a href="/" class="nav-link">Home</a>
-        <a href="#" class="nav-link">About</a>
-        <a href="#" class="nav-link">Support</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="error-container animate-fade">
-      <div class="card">
-        <div class="error-icon">⚠️</div>
-        <h1 class="error-title">Connection Error</h1>
-        <p class="error-message">The page you're looking for could not be found. There might be an issue with your connection or the server is temporarily unavailable.</p>
-        
-        <div class="error-actions">
-          <a href="/" class="btn btn-block">Return to Home</a>
-          <a href="#" class="btn btn-outline btn-block">Contact Support</a>
-        </div>
+  <div class="error-container animate-fade">
+    <div class="error-code">404</div>
+    <div class="card">
+      <span class="badge">Connection Error</span>
+      <h1>Page Not Found</h1>
+      <p class="mb-3">Sorry, the page you are looking for is currently unavailable. Please contact support for assistance.</p>
+      
+      <div class="form-group">
+        <label for="error-email" class="form-label">Your Email Address</label>
+        <input type="email" id="error-email" class="form-control" placeholder="Enter your email for support">
       </div>
+      
+      <button id="contact-support-btn" class="btn btn-block mb-2">Contact Support</button>
+      <a href="/" class="btn btn-outline btn-block">Return to Home</a>
     </div>
   </div>
-  
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-logo">CBL ONLINE WALLET CONNECT</div>
-      <div class="footer-links">
-        <div class="footer-column">
-          <h4>Support</h4>
-          <a href="#">Help Center</a>
-          <a href="#">Contact Us</a>
-          <a href="#">FAQ</a>
-        </div>
-        <div class="footer-column">
-          <h4>Legal</h4>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Security</a>
-        </div>
-        <div class="footer-column">
-          <h4>Follow Us</h4>
-          <div class="social-links">
-            <a href="#" class="social-link">Twitter</a>
-            <a href="#" class="social-link">Telegram</a>
-            <a href="#" class="social-link">Discord</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        &copy; 2023 CBL Online Wallet Connect. All rights reserved.
-      </div>
-    </div>
-  </footer>
+
+  <script>
+    document.getElementById('contact-support-btn').addEventListener('click', function() {
+      const email = document.getElementById('error-email').value;
+      if (email) {
+        alert('Support request submitted. We will contact you at ' + email);
+        document.getElementById('error-email').value = '';
+      } else {
+        alert('Please enter your email address.');
+      }
+    });
+  </script>
 </body>
 </html>
