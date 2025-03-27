@@ -314,3 +314,28 @@ h2 {
     padding: 10px 20px;
   }
 }
+
+/* What If Section */
+#what-if-section {
+  background-color: var(--primary-bg);
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.what-if-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#what-if-section h2 {
+  color: var(--accent-color);
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+#what-if-section p {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+}
