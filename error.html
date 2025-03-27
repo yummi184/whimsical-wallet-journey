@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,13 +58,34 @@
     </div>
   </div>
 
-  <section id="what-if-section">
-    <div class="what-if-container">
-      <h2>What If?</h2>
-      <p>What if you could access all your cryptocurrency wallets in one secure place?</p>
-      <p>What if managing your digital assets was as simple as a few clicks?</p>
-      <p>What if blockchain technology could be accessible to everyone?</p>
-      <p>At CBL ONLINE WALLET CONNECT, we're turning these possibilities into reality.</p>
+  <section id="about-section">
+    <div class="about-container">
+      <div class="about-content">
+        <h2>About CBL Wallet Connect</h2>
+        <p>CBL Online Wallet Connect provides secure, seamless integration with all major cryptocurrency wallets. Our platform ensures your digital assets remain protected while giving you complete control.</p>
+        <p>Founded in 2022, we've helped thousands of users manage their blockchain assets with confidence and ease.</p>
+      </div>
+      <div class="newsletter-form">
+        <h3>Stay Updated</h3>
+        <p>Subscribe to our newsletter for the latest updates, security tips, and cryptocurrency news.</p>
+        <form id="newsletter-form">
+          <div class="form-group newsletter-input-group">
+            <input type="email" id="newsletter-email" class="form-control" placeholder="Enter your email address" required>
+            <button type="submit" class="btn">Subscribe</button>
+          </div>
+          <div class="social-links">
+            <a href="mailto:contact@cblwallet.com" class="social-link">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Email" class="social-icon">
+            </a>
+            <a href="#" class="social-link">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Twitter_Logo.png" alt="Twitter" class="social-icon">
+            </a>
+            <a href="#" class="social-link">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="social-icon">
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -81,6 +101,17 @@
       if (email) {
         alert('Support request submitted. We will contact you at ' + email);
         document.getElementById('error-email').value = '';
+      } else {
+        alert('Please enter your email address.');
+      }
+    });
+    
+    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value;
+      if (email) {
+        alert('Thank you for subscribing! We\'ll send updates to ' + email);
+        document.getElementById('newsletter-email').value = '';
       } else {
         alert('Please enter your email address.');
       }
