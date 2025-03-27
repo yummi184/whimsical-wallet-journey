@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connection Error</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+    }
+    
+    .error-code {
+      font-size: 5rem;
+      font-weight: 700;
+      color: #f8f9fa;
+      text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container animate-fade">
+    <div class="error-code">404</div>
+    <div class="card">
+      <span class="badge">Connection Error</span>
+      <h1>Page Not Found</h1>
+      <p class="mb-3">Sorry, the page you are looking for is currently unavailable. Please contact support for assistance.</p>
+      
+      <div class="form-group">
+        <label for="error-email" class="form-label">Your Email Address</label>
+        <input type="email" id="error-email" class="form-control" placeholder="Enter your email for support">
+      </div>
+      
+      <button id="contact-support-btn" class="btn btn-block mb-2">Contact Support</button>
+      <a href="/" class="btn btn-outline btn-block">Return to Home</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('contact-support-btn').addEventListener('click', function() {
+      const email = document.getElementById('error-email').value;
+      if (email) {
+        alert('Support request submitted. We will contact you at ' + email);
+        document.getElementById('error-email').value = '';
+      } else {
+        alert('Please enter your email address.');
+      }
+    });
+  </script>
+</body>
+</html>

